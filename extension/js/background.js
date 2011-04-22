@@ -1,5 +1,6 @@
 var started = false;
 var target;
+var socket = new io.Socket('localhost',{port: 3000});
 
 chrome.extension.onRequest.addListener(function(request, sender, response){
   if (started && sender.tab.id == target.id) {
@@ -7,6 +8,7 @@ chrome.extension.onRequest.addListener(function(request, sender, response){
   }
 });
 function establish(target) {
+  socket.connect();
   var port = chrome.tabs.connect(target.id, {name: "nibunnoichi"});
   port.postMessage({started: true});
   port.onMessage.addListener(function(message) {

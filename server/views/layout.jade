@@ -1,0 +1,12 @@
+!!! 5
+html
+  head
+    title Nibun no Ichi
+    script(src='/socket.io/socket.io.js')
+    script
+      var socket = new io.Socket('localhost', {port: 3000});
+      socket.connect();
+      socket.send({message: "hi"});
+
+  body
+    != body
