@@ -1,8 +1,13 @@
 {
   "name": "1/2",
-  "version": "0.1",
+  "version": "0.2",
   "description": "Browser Sync",
   "background_page": "background_page.html",
+  "icons": {
+    "128": "logo.png",
+    "16": "logo.png",
+    "48": "logo.png"
+  },
   "permissions": [
     "tabs",
     "http://*/*"
