@@ -15,8 +15,8 @@ function Firefly(origin) {
 }
 Firefly.prototype = {
   flyTo: function(position) {
-    this.element.style.top = position.x - 15 + "px";
-    this.element.style.left = position.y - 15 + "px";
+    this.element.style.top = position.y - 15 + "px";
+    this.element.style.left = position.x - 15 + "px";
     document.body.appendChild(this.element);
     return this.element;
   },
