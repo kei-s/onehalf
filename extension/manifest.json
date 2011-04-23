@@ -1,6 +1,6 @@
 {
   "name": "1/2",
-  "version": "0.3",
+  "version": "0.4",
   "description": "Browser Sync",
   "background_page": "background_page.html",
   "icons": {
