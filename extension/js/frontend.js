@@ -34,7 +34,7 @@ var action = {
     firefly.flyTo(data);
   },
   scroll: function(origin,data) {
-    console.log('scroll',origin,data)
+    window.scroll(data.x, data.y);
   }
 };
 function setChannel(channel, origin) {

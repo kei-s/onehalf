@@ -21,7 +21,6 @@ socket.on('disconnect', function() {
   enable();
 });
 socket.on('message', function(message) {
-  console.log("on socket", message);
   if (!started) {
     return;
   }
@@ -29,6 +28,7 @@ socket.on('message', function(message) {
     port.postMessage(message);
   }
   if (message.status && message.status == "update") {
+    console.log("on socket", message);
     chrome.tabs.update(target.id, {url: message.url}, function(tab) {
       if (tab.id == target.id) {
         updating = true;
@@ -53,7 +53,6 @@ function send(message) {
 }
 function bind(currentPort) {
   port = currentPort;
-  port.postMessage({status: "binded", channel: channel});
   port.postMessage({status: "binded", channel: channel, me: socket.transport.sessionid});
   port.onMessage.addListener(function(message) {
     send(message);
