@@ -4,7 +4,7 @@ var listener = {
     post('mousemove', {x: event.clientX, y: event.clientY});
   },
   scroll: function(event) {
-    post('scroll', {x: window.scrollX, y: window.scrollY});
+    //post('scroll', {x: window.scrollX, y: window.scrollY});
   }
 };
 
@@ -16,8 +16,8 @@ function Firefly(origin) {
 }
 Firefly.prototype = {
   flyTo: function(position) {
-    this.element.style.top = position.y - 15 + "px";
-    this.element.style.left = position.x - 15 + "px";
+    this.element.style.top = position.y + 2 + "px";
+    this.element.style.left = position.x - 8 + "px";
     document.body.appendChild(this.element);
     return this.element;
   },
@@ -39,8 +39,6 @@ var action = {
 };
 function setChannel(channel, origin) {
   var hue = origin * 47 % 360;
-  console.log(origin);
-  console.log(hue);
   var span = document.createElement('span');
   span.textContent = channel;
   span.setAttribute('style', 'position: fixed; top: 10px; right: 10px; padding: 5px 10px; color: #666; background-color: hsla(' + hue + ', 100%, 70%, 1); border-radius: 5px;');
