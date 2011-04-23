@@ -7,6 +7,9 @@ var express = require('express')
 
 
 app = express.createServer();
+app.configure(function() {
+  app.use(express.static(__dirname + '/public'));
+});
 app.get('/', function(req, res) {
   res.render('index.jade');
 });
@@ -16,6 +19,6 @@ var socket = io.listen(app);
 socket.on('connection', function(client) {
   client.on('message', function(message) {
     console.log(client.sessionId, message);
-    client.broadcast(message);
+    socket.broadcast(message);
   });
 });
