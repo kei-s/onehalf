@@ -2,14 +2,14 @@ function $(id) {
   return document.getElementById(id);
 }
 
-$("room").value = localStorage["room"] || "";
+$("channel").value = localStorage["channel"] || "";
 chrome.extension.sendRequest({status: "popup"}, function(response) {
   console.log(response);
   if (response.status == "stopped") {
     $("join").addEventListener("click", function(event) {
-      var room = $('room').value;
-      if (room) {
-        chrome.extension.sendRequest({status: "start", room: room});
+      var channel = $('channel').value;
+      if (channel) {
+        chrome.extension.sendRequest({status: "start", channel: channel});
       }
       window.close();
     });
