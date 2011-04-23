@@ -1,4 +1,5 @@
 var port;
+var span;
 var listener = {
   mousemove: function(event) {
     post('mousemove', {x: event.clientX, y: event.clientY});
@@ -39,7 +40,7 @@ var action = {
 };
 function setChannel(channel, origin) {
   var hue = origin * 47 % 360;
-  var span = document.createElement('span');
+  span = document.createElement('span');
   span.textContent = channel;
   span.setAttribute('style', 'position: fixed; top: 10px; right: 10px; padding: 5px 10px; color: #666; background-color: hsla(' + hue + ', 100%, 70%, 1); border-radius: 5px;');
   document.body.appendChild(span);
@@ -49,9 +50,22 @@ function post(name, data) {
 }
 function talk(currentPort) {
   port = currentPort;
+  function clean() {
+    document.body.removeChild(span);
+    for (var key in fireflies) {
+      fireflies[key].remove();
+      delete fireflies[key];
+    }
+    for (var key in listener) {
+      window.removeEventListener(key, listener[key]);
+    }
+  }
   port.onMessage.addListener(function(message) {
     if (message.status == "binded") {
       setChannel(message.channel, message.me);
+    }
+    else if (message.status == "disconnect") {
+      clean();
     }
     else if (action[message.event]) {
       action[message.event](message.origin,message.data);
@@ -60,11 +74,7 @@ function talk(currentPort) {
   for (var key in listener) {
     window.addEventListener(key, listener[key]);
   }
-  port.onDisconnect.addListener(function() {
-    for (var key in listener) {
-      window.removeEventListener(key, listener[key]);
-    }
-  });
+  port.onDisconnect.addListener(clean);
 }
 
 chrome.extension.onConnect.addListener(function(port) {

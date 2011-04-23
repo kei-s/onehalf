@@ -18,6 +18,7 @@ socket.on('connect', function() {
 socket.on('disconnect', function() {
   started = false;
   target = undefined;
+  port.postMessage({status: "disconnect"});
   enable();
 });
 socket.on('message', function(message) {
