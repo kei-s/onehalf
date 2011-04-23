@@ -3,7 +3,7 @@ var target;
 var port;
 var channel;
 var updating = false;
-var socket = new io.Socket('kei-s.no.de');
+var socket = new io.Socket('onehalf.libelabo.jp');
 
 socket.on('connect', function() {
   chrome.tabs.getSelected(null,function(currentTab){
