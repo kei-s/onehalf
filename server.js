@@ -16,9 +16,18 @@ app.get('/', function(req, res) {
 app.listen(80);
 
 var socket = io.listen(app);
+var clients = {};
 socket.on('connection', function(client) {
   client.on('message', function(message) {
-    console.log(client.sessionId, message);
-    socket.broadcast(message);
+    if(message.status && message.status == 'connect') {
+      client._channel = message.channel;
+    }
+    console.log("<- ["+client._channel+"] "+client.sessionId, message);
+    _.each(socket.clients, function(destClient) {
+      if(destClient._channel && client._channel == destClient._channel) {
+        destClient.send(message);
+        console.log("-> ["+destClient._channel+"] "+destClient.sessionId, message);
+      }
+    });
   });
 });
