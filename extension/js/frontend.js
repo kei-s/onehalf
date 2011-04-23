@@ -18,6 +18,7 @@ var action = {
 function setChannel(channel) {
   var span = document.createElement('span');
   span.textContent = channel;
+  span.setAttribute('style', 'position: fixed; top: 10px; right: 10px; padding: 5px 10px; background-color: rgba(255, 255, 255, 0.75); border-radius: 5px;');
   document.body.appendChild(span);
 }
 function post(name, data) {
