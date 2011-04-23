@@ -37,6 +37,6 @@ function talk(currentPort) {
 }
 
 chrome.extension.onConnect.addListener(function(port) {
-  console.assert(port.name == "nibunnoichi");
+  console.assert(port.name == "one-half");
   talk(port);
 });

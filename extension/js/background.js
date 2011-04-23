@@ -36,7 +36,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
       send({status: "update", url: changeInfo.url});
     }
     else if (updating && changeInfo.status == "complete") {
-      bind(chrome.tabs.connect(target.id, {name: "nibunnoichi"}));
+      bind(chrome.tabs.connect(target.id, {name: "one-half"}));
       updating = false;
     }
   }
@@ -52,7 +52,7 @@ function bind(currentPort) {
   });
 }
 function establish(target, url) {
-  bind(chrome.tabs.connect(target.id, {name: "nibunnoichi"}));
+  bind(chrome.tabs.connect(target.id, {name: "one-half"}));
   send({status: "update", url: url});
 }
 function connected() {
