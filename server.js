@@ -17,12 +17,16 @@ app.listen(80);
 
 var socket = io.listen(app);
 var clients = {};
+var filter = /^http:\/\//;
 socket.on('connection', function(client) {
   client.on('message', function(message) {
     if(message.status && message.status == 'connect') {
       client._channel = message.channel;
     }
     console.log("<- ["+client._channel+"] "+client.sessionId, message);
+    if(message.status && message.status == 'update' && message.url && !filter.test(message.url)) {
+      return;
+    }
     _.each(socket.clients, function(destClient) {
       if(destClient._channel && client._channel == destClient._channel) {
         destClient.send(message);
