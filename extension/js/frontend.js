@@ -8,11 +8,11 @@ var listener = {
   }
 };
 var action = {
-  mousemove: function(data) {
-    console.log('mousemove',data.origin,data)
+  mousemove: function(origin,data) {
+    console.log('mousemove',origin,data)
   },
-  scroll: function(data) {
-    console.log('scroll',data.origin,data)
+  scroll: function(origin,data) {
+    console.log('scroll',origin,data)
   }
 };
 function post(name, data) {
@@ -21,9 +21,8 @@ function post(name, data) {
 function talk(currentPort) {
   port = currentPort;
   port.onMessage.addListener(function(message) {
-    console.log(message);
     if (action[message.event]) {
-      action[message.event](message.data);
+      action[message.event](message.origin,message.data);
     }
   });
   for (var key in listener) {
