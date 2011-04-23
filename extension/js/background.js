@@ -2,7 +2,7 @@ var started = false;
 var target;
 var port;
 var updating = false;
-var socket = new io.Socket('49.212.12.48',{port: 3333});
+var socket = new io.Socket('kei-s.no.de');
 
 socket.on('connect', function() {
   chrome.tabs.getSelected(null,function(currentTab){
