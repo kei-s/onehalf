@@ -7,10 +7,11 @@ var listener = {
     post('scroll', {x: window.scrollX, y: window.scrollY});
   }
 };
+
 var fireflies = {};
 function Firefly(origin) {
-  this.element = document.createElement('div');
   var hue = origin * 47 % 360;
+  this.element = document.createElement('div');
   this.element.setAttribute("style", "position: fixed; height: 30px; width: 30px; background-image: -webkit-gradient(radial, center center, 5, center center, 15, from(hsla(" + hue + ", 100%, 70%, 1)), to(hsla(0, 100%, 100%, 0)))");
 }
 Firefly.prototype = {
@@ -36,10 +37,13 @@ var action = {
     console.log('scroll',origin,data)
   }
 };
-function setChannel(channel) {
+function setChannel(channel, origin) {
+  var hue = origin * 47 % 360;
+  console.log(origin);
+  console.log(hue);
   var span = document.createElement('span');
   span.textContent = channel;
-  span.setAttribute('style', 'position: fixed; top: 10px; right: 10px; padding: 5px 10px; background-color: rgba(255, 255, 255, 0.75); border-radius: 5px;');
+  span.setAttribute('style', 'position: fixed; top: 10px; right: 10px; padding: 5px 10px; color: #666; background-color: hsla(' + hue + ', 100%, 70%, 1); border-radius: 5px;');
   document.body.appendChild(span);
 }
 function post(name, data) {
@@ -49,7 +53,7 @@ function talk(currentPort) {
   port = currentPort;
   port.onMessage.addListener(function(message) {
     if (message.status == "binded") {
-      setChannel(message.channel);
+      setChannel(message.channel, message.me);
     }
     else if (action[message.event]) {
       action[message.event](message.origin,message.data);

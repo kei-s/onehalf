@@ -54,6 +54,7 @@ function send(message) {
 function bind(currentPort) {
   port = currentPort;
   port.postMessage({status: "binded", channel: channel});
+  port.postMessage({status: "binded", channel: channel, me: socket.transport.sessionid});
   port.onMessage.addListener(function(message) {
     send(message);
   });
