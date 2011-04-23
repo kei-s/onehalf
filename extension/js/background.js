@@ -1,11 +1,14 @@
 var started = false;
 var target;
 var port;
+var channel;
 var updating = false;
 var socket = new io.Socket('kei-s.no.de');
 
 socket.on('connect', function() {
   chrome.tabs.getSelected(null,function(currentTab){
+    console.log('connect', channel);
+    send({status: "connect", channel: channel});
     started = true;
     target = currentTab;
     establish(target, target.url);
@@ -70,22 +73,46 @@ function disable() {
 function finish() {
   socket.disconnect();
 }
-function start() {
+function start(currentChannel) {
+  channel = currentChannel;
   socket.connect();
 }
 
-chrome.browserAction.onClicked.addListener(function() {
+chrome.browserAction.setPopup({popup: 'popup.html'});
+chrome.extension.onRequest.addListener(function(request, sender, callback) {
+  if (request.status == "popup") {
+    if (started) {
+      if (target && sender.tab.id == target.id) {
+        callback({status: "started", target: "this"});
+      }
+      else {
+        callback({status: "started", target: "other"});
+      }
+    }
+    else {
+      callback({status: "stopped"});
+    }
+    return;
+  }
   chrome.tabs.getSelected(null,function(currentTab){
-    if (!started && !target) {
-      start();
-    }
-    else if (target && target.id == currentTab.id) {
-      finish();
-    }
-    else if (target) {
-      chrome.tabs.update(target.id, {selected: true});
+    if (!started && !target && request.status == "start") {
+      start(request.channel);
+      chrome.browserAction.setPopup({popup: ''});
     }
   });
+});
+chrome.browserAction.onClicked.addListener(function(tab) {
+  if (!started) {
+    return;
+  }
+  else if (target && target.id == tab.id) {
+    finish();
+    chrome.browserAction.setPopup({popup: 'popup.html'});
+  }
+  else if (target && target.id != tab.id) {
+    chrome.tabs.update(target.id, {selected: true});
+    chrome.browserAction.setPopup({popup: ''});
+  }
 });
 chrome.tabs.onSelectionChanged.addListener(function(tabId, selectInfo) {
   if (started && tabId == target.id) {
