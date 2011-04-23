@@ -1,0 +1,23 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+#contents {
+  margin: auto;
+  padding: 50px;
+  width: 600px;
+  min-height: 500px;
+  background: url(/images/onehalf.png);
+  background-repeat: no-repeat;
+  background-position: left top;
+  background-color: #fff;
+}
+
+h1 {
+  margin-top: 50px;
+  font-family: "Fontdiner Swanky";
+  font-size: 250%;
+  text-shadow: 2px 2px 2px #aaa;
+  text-align: right;
+}

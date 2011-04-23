@@ -1,8 +1,10 @@
 !!! 5
 html
   head
-    title 1/2 - もっとひっついてたいのさ
-    script(src='/socket.io/socket.io.js')
+    title 1/2 - Real-time Tab Sync
+    link(rel="stylesheet", type="text/css", href="/stylesheets/onehalf.css")
+    link(rel="stylesheet", type="text/css", href="http://fonts.googleapis.com/css?family=Fontdiner+Swanky")
+    script(src="/socket.io/socket.io.js")
     script
       var socket = new io.Socket();
       socket.on('connect', function() {
