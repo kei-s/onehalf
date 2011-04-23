@@ -4,7 +4,7 @@ html
     title 1/2 - もっとひっついてたいのさ
     script(src='/socket.io/socket.io.js')
     script
-      var socket = new io.Socket('localhost', {port: 3000});
+      var socket = new io.Socket();
       socket.on('connect', function() {
         socket.send({message: "hi"});
         socket.on('message', function(message) {
