@@ -22,5 +22,6 @@
       "js": ["js/frontend.js"],
       "run_at": "document_start"
     }
-  ]
+  ],
+  "update_url": "http://onehalf.libelabo.jp/updates.xml"
 }
