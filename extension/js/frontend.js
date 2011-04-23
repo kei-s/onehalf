@@ -39,8 +39,6 @@ var action = {
 };
 function setChannel(channel, origin) {
   var hue = origin * 47 % 360;
-  console.log(origin);
-  console.log(hue);
   var span = document.createElement('span');
   span.textContent = channel;
   span.setAttribute('style', 'position: fixed; top: 10px; right: 10px; padding: 5px 10px; color: #666; background-color: hsla(' + hue + ', 100%, 70%, 1); border-radius: 5px;');
