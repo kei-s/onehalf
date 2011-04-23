@@ -7,9 +7,30 @@ var listener = {
     post('scroll', {x: window.scrollX, y: window.scrollY});
   }
 };
+var fireflies = {};
+function Firefly(origin) {
+  this.element = document.createElement('div');
+  var hue = origin * 47 % 360;
+  this.element.setAttribute("style", "position: absolute; height: 30px; width: 30px; background-image: -webkit-gradient(radial, center center, 5, center center, 15, from(hsla(" + hue + ", 100%, 70%, 1)), to(hsla(0, 100%, 100%, 0)))");
+}
+Firefly.prototype = {
+  flyTo: function(position) {
+    this.element.style.top = position.x - 15 + "px";
+    this.element.style.left = position.y - 15 + "px";
+    document.body.appendChild(this.element);
+    return this.element;
+  },
+  remove: function() {
+    document.body.removeChild(this.element);
+  }
+};
 var action = {
   mousemove: function(origin,data) {
-    console.log('mousemove',origin,data)
+    if (!fireflies[origin]) {
+      fireflies[origin] = new Firefly(origin);
+    }
+    var firefly = fireflies[origin];
+    firefly.flyTo(data);
   },
   scroll: function(origin,data) {
     console.log('scroll',origin,data)
