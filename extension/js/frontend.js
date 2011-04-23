@@ -11,7 +11,7 @@ var fireflies = {};
 function Firefly(origin) {
   this.element = document.createElement('div');
   var hue = origin * 47 % 360;
-  this.element.setAttribute("style", "position: absolute; height: 30px; width: 30px; background-image: -webkit-gradient(radial, center center, 5, center center, 15, from(hsla(" + hue + ", 100%, 70%, 1)), to(hsla(0, 100%, 100%, 0)))");
+  this.element.setAttribute("style", "position: fixed; height: 30px; width: 30px; background-image: -webkit-gradient(radial, center center, 5, center center, 15, from(hsla(" + hue + ", 100%, 70%, 1)), to(hsla(0, 100%, 100%, 0)))");
 }
 Firefly.prototype = {
   flyTo: function(position) {
