@@ -2,7 +2,7 @@ var started = false;
 var target;
 var port;
 var updating = false;
-var socket = new io.Socket('localhost',{port: 3000});
+var socket = new io.Socket('49.212.12.48',{port: 3333});
 
 socket.on('connect', function() {
   chrome.tabs.getSelected(null,function(currentTab){
@@ -19,6 +19,9 @@ socket.on('disconnect', function() {
 });
 socket.on('message', function(message) {
   console.log("on socket", message);
+  if (!started) {
+    return;
+  }
   if (message.status != "update") {
     port.postMessage(message);
   }
