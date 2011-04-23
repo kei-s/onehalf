@@ -1,22 +1,59 @@
 var started = false;
 var target;
+var port;
+var updating = false;
 var socket = new io.Socket('localhost',{port: 3000});
 
-chrome.extension.onRequest.addListener(function(request, sender, response){
-  if (started && sender.tab.id == target.id) {
-    establish(target);
+socket.on('connect', function() {
+  chrome.tabs.getSelected(null,function(currentTab){
+    started = true;
+    target = currentTab;
+    establish(target, target.url);
+    disable();
+  });
+});
+socket.on('disconnect', function() {
+  started = false;
+  target = undefined;
+  enable();
+});
+socket.on('message', function(message) {
+  console.log("on socket", message);
+  if (message.status != "update") {
+    port.postMessage(message);
+  }
+  if (message.status && message.status == "update") {
+    chrome.tabs.update(target.id, {url: message.url}, function(tab) {
+      if (tab.id == target.id) {
+        updating = true;
+      }
+    });
   }
 });
-function establish(target) {
-  socket.connect();
-  var port = chrome.tabs.connect(target.id, {name: "nibunnoichi"});
-  port.postMessage({started: true});
+chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+  if (target && tabId == target.id) {
+    if (!updating && changeInfo.status == "loading") {
+      send({status: "update", url: changeInfo.url});
+    }
+    else if (updating && changeInfo.status == "complete") {
+      bind(chrome.tabs.connect(target.id, {name: "nibunnoichi"}));
+      updating = false;
+    }
+  }
+});
+
+function send(message) {
+  socket.send(_.extend(message, {origin: socket.transport.sessionid}));
+}
+function bind(currentPort) {
+  port = currentPort;
   port.onMessage.addListener(function(message) {
-    console.log(message);
+    send(message);
   });
-  port.onDisconnect.addListener(function(message) {
-    console.log("disconnect", message);
-  });
+}
+function establish(target, url) {
+  bind(chrome.tabs.connect(target.id, {name: "nibunnoichi"}));
+  send({status: "update", url: url});
 }
 function connected() {
   chrome.browserAction.setIcon({path: "connected.png"})
@@ -28,33 +65,31 @@ function disable() {
   chrome.browserAction.setIcon({path: "disable.png"})
 }
 function finish() {
-  started = false;
-  target = undefined;
-  enable();
+  socket.disconnect();
 }
-function start(currentTab) {
-  started = true;
-  target = currentTab;
-  establish(target);
-  connected();
+function start() {
+  socket.connect();
 }
 
 chrome.browserAction.onClicked.addListener(function() {
   chrome.tabs.getSelected(null,function(currentTab){
     if (!started && !target) {
-      start(currentTab);
+      start();
     }
     else if (target && target.id == currentTab.id) {
       finish();
+    }
+    else if (target) {
+      chrome.tabs.update(target.id, {selected: true});
     }
   });
 });
 chrome.tabs.onSelectionChanged.addListener(function(tabId, selectInfo) {
   if (started && tabId == target.id) {
-    connected();
+    disable();
   }
   else if (started) {
-    disable();
+    connected();
   }
   else {
     enable();

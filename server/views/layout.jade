@@ -5,8 +5,13 @@ html
     script(src='/socket.io/socket.io.js')
     script
       var socket = new io.Socket('localhost', {port: 3000});
+      socket.on('connect', function() {
+        socket.send({message: "hi"});
+        socket.on('message', function(message) {
+          console.log(message);
+        });
+      });
       socket.connect();
-      socket.send({message: "hi"});
 
   body
     != body
