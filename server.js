@@ -13,7 +13,7 @@ app.configure(function() {
 app.get('/', function(req, res) {
   res.render('index.jade');
 });
-app.listen(3333);
+app.listen(80);
 
 var socket = io.listen(app);
 socket.on('connection', function(client) {
