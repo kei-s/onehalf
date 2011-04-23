@@ -53,6 +53,7 @@ function send(message) {
 }
 function bind(currentPort) {
   port = currentPort;
+  port.postMessage({status: "binded", channel: channel});
   port.onMessage.addListener(function(message) {
     send(message);
   });

@@ -15,13 +15,21 @@ var action = {
     console.log('scroll',origin,data)
   }
 };
+function setChannel(channel) {
+  var span = document.createElement('span');
+  span.textContent = channel;
+  document.body.appendChild(span);
+}
 function post(name, data) {
   port.postMessage({event: name, data: data});
 }
 function talk(currentPort) {
   port = currentPort;
   port.onMessage.addListener(function(message) {
-    if (action[message.event]) {
+    if (message.status == "binded") {
+      setChannel(message.channel);
+    }
+    else if (action[message.event]) {
       action[message.event](message.origin,message.data);
     }
   });
