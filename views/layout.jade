@@ -5,7 +5,7 @@ html
     link(rel="stylesheet", type="text/css", href="/stylesheets/onehalf.css")
     link(rel="stylesheet", type="text/css", href="http://fonts.googleapis.com/css?family=Fontdiner+Swanky")
     script(src="/socket.io/socket.io.js")
-    script
+    script.
       var socket = new io.Socket();
       socket.on('connect', function() {
         socket.send({message: "hi"});
